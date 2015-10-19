@@ -21,10 +21,13 @@ function createAndMove {
 	# Checks if the output directory exists.
 	# not exists? Create a new directory
 
-	if [ -d "$OUT_DIR" ]; then
+	if test -d $OUT_DIR
+	then
 		echo "Directoy already exists...[OK]"
-		echo "Exit function"
+		echo "If you want to re-classify this files remove the $OUT_DIR and run the code again"
+		echo "Exit the Function"
 	else
+
 		echo "$OUT_DIR directory doesn't exist..."
 		echo "Creating Directoy...[ok]"
 		

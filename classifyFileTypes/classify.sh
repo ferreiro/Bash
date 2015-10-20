@@ -5,8 +5,8 @@
 # mueva todos los archivos de todos los tipos cada una a su respectiva carpeta ".psd" "jpg"
 
 args=("$@") # Parameters pass by console
-OUTPUTDIRECTORY=tmp # name of directory to move the files
-FILE_TYPE=ull
+OUTPUTDIRECTORY=null # name of directory to move the files
+FILE_TYPE=null
 
 function createAndMove {
 
@@ -69,39 +69,46 @@ elif [ ${args[0]} == "pdf" ]; then
 
 	FILE_TYPE=pdf
 	OUTPUTDIRECTORY=pdf
-	createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass pdf and output directory parameters
 
 elif [ ${args[0]} == "mp3" ]; then
 
 	FILE_TYPE=mp3
 	OUTPUTDIRECTORY=mp3
-	createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass pdf and output directory parameters
 
 elif [ ${args[0]} == "torrent" ]; then
 
 	FILE_TYPE=torrent
 	OUTPUTDIRECTORY=torrent
-	createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass pdf and output directory parameters
 
 elif [ ${args[0]} == "jpg" ]; then
 
 	FILE_TYPE=jpg
 	OUTPUTDIRECTORY=jpg
-	createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass pdf and output directory parameters
 
 elif [ ${args[0]} == "zip" ]; then
 
 	FILE_TYPE=zip
 	OUTPUTDIRECTORY=zip
-	createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass pdf and output directory parameters
 
 else
 	echo "${args[0]} parameter is not accepted"
-	echo "Accepted formats are: mp3, torrent, pdf, zip, jpg"
-	exit 1 # terminate and indicate error
+	echo "Accepted formats are: pdf, mp3, torrent, jpg and zip"
+	exit 1 # terminate and exit with error
 fi
- 
-exit 0 # termination with success
 
-# find . -iname "*.mp3" -print
-# find . -iname "*.mp3" -type f -exec /bin/mv {} /mnt/mp3 \;
+# If there wans't an error. Before check if the type and
+# directory were setted properly. If so, then call the 
+# function to organise the files in different folders
+
+if $FILE_TYPE == null
+then
+	echo "The file type specified is not valid"
+	exit 1 # terminate and exit with error
+elif $OUTPUTDIRECTORY == null
+then
+	echo "The output directory wasn't set properly..."
+	exit 1 # terminate and exit with error
+fi
+
+createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass the file type and output directory as parameters
+exit 0 # termination with success

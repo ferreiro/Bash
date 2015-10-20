@@ -10,10 +10,10 @@ FILE_TYPE=null
 
 function createAndMove {
 
-	TYPE=$1 # pass the file type via parameter 
-	OUT_DIR=$2 # pass the directory via second parameter 
- 
-	if [ $TYPE == "null" ]; then
+	TYPE=$1 # pass the file type via function parameter 
+	OUT_DIR=$2 # pass the directory via second function parameter 
+
+	if [ "$TYPE"=="null" || "$OUT_DIR"=="null" ]; then
 		echo "Null format" # if for some reason the file type is null. Then exit
 		exit 1 # terminate and indicate error
 	fi
@@ -25,45 +25,33 @@ function createAndMove {
 	then
 		echo "Directoy already exists...[OK]"
 		echo "If you want to re-classify this files remove the $OUT_DIR and run the code again"
-		echo "Exit the Function"
+		echo "Exiting the program..."
 	else
 
 		echo "$OUT_DIR directory doesn't exist..."
-		echo "Creating Directoy...[ok]"
+		echo "Creating $OUT_DIR Directoy...[ok]"
 		
 		mkdir $OUT_DIR # creates a directory
  
-		echo File type is: $TYPE
-		echo Output directory is: $OUT_DIR
-
-		# If the format are allowed. 
-		# Creates a folder and move all the files of this type to the folder
-
-
 		# TODO: Que solo copie los archivos de ./, no del resto de subcarpetas.
 		# porque este código lo que hace es mirar todos los archivos con esa extensión
 		# en la carpeta principal y subcarpetas...
-
-		find . -name '*.'$TYPE -type f -print0 | xargs -0 -I list mv list ${OUT_DIR}
 
 		# The './*.'$TYPE'*', is a regex that find all the files with *.Extension. That means
 		# *.mp3 (where the $TYPE is a local variable like: pdf or mp3.)
 		# *.mp3* (will find all the elements with that extension in ALL the folder)
 		# If you only want all files in the CURRENT directory, only use *.mp3
 
+		find . -name '*.'$TYPE -type f -print0 | xargs -0 -I list mv list ${OUT_DIR}
+
 	fi
 }
+
 if [ ${args[0]} == "all" ]; then
 
-	echo "not yet"
-	# createAndMove dmg dmg
-	# createAndMove pkg pkg
-	# createAndMove tar.gz tar.gz
-	# createAndMove rar rar
-	# createAndMove mov mov
-	# createAndMove wav wav
-	# createAndMove m4a m4a
-	# createAndMove avi avi
+	echo "Funcionality not implemented yet"
+	# TODO: Move all the file type to 
+	# their correspondin output directory at ones
 	
 elif [ ${args[0]} == "pdf" ]; then
 
@@ -96,19 +84,8 @@ else
 	exit 1 # terminate and exit with error
 fi
 
-# If there wans't an error. Before check if the type and
-# directory were setted properly. If so, then call the 
+# If there wans't an error call the 
 # function to organise the files in different folders
-
-if $FILE_TYPE == null
-then
-	echo "The file type specified is not valid"
-	exit 1 # terminate and exit with error
-elif $OUTPUTDIRECTORY == null
-then
-	echo "The output directory wasn't set properly..."
-	exit 1 # terminate and exit with error
-fi
 
 createAndMove $FILE_TYPE $OUTPUTDIRECTORY # call the function and pass the file type and output directory as parameters
 exit 0 # termination with success
